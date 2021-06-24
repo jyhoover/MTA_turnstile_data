@@ -14,3 +14,14 @@ Anthor major thing is to give a sence of how the pendamic changes the city. By c
 Along with many charts possibly created by the concepts explained above, it is also cool if we can visualize the commutor numbers on the map over time.
 
 Another possible and interesting idea is to analysize the turnstil data along with the MTA's real-time data feeds. We can know things like when and which line more subway service is needed.
+
+data
+
+The data can be downloaded here:
+https://data.ny.gov/Transportation/Turnstile-Usage-Data-2015/ug6q-shqc
+https://data.ny.gov/Transportation/Turnstile-Usage-Data-2016/ekwu-khcy
+https://data.ny.gov/Transportation/Turnstile-Usage-Data-2017/v5y5-mwpb
+https://data.ny.gov/Transportation/Turnstile-Usage-Data-2018/bjcb-yee3
+https://data.ny.gov/Transportation/Turnstile-Usage-Data-2019/xfn5-qji9
+https://data.ny.gov/Transportation/Turnstile-Usage-Data-2020/py8k-a8wg
+https://data.ny.gov/Transportation/Turnstile-Usage-Data-2021/uu7b-3kff
