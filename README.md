@@ -12,3 +12,5 @@ This project focuses on analysizing the turnstile usage data generated from MTA 
 Anthor major thing is to give a sence of how the pendamic changes the city. By comparing the commuter data, we can know things like where the essential workers live and work, how confident New Yorkers feel to return to social life since the restrictions gradually lifted, etc. 
 
 Along with many charts possibly created by the concepts explained above, it is also cool if we can visualize the commutor numbers on the map over time.
+
+Another possible and interesting idea is to analysize the turnstil data along with the MTA's real-time data feeds. We can know things like when and which line more subway service is needed.
