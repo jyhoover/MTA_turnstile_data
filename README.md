@@ -25,3 +25,4 @@ https://data.ny.gov/Transportation/Turnstile-Usage-Data-2018/bjcb-yee3
 https://data.ny.gov/Transportation/Turnstile-Usage-Data-2019/xfn5-qji9
 https://data.ny.gov/Transportation/Turnstile-Usage-Data-2020/py8k-a8wg
 https://data.ny.gov/Transportation/Turnstile-Usage-Data-2021/uu7b-3kff
+http://web.mta.info/developers/developer-data-terms.html#data
