@@ -4,75 +4,143 @@ import numpy as np
 from datetime import date
 import requests
 import altair as alt
+import geopandas
+import folium
+import dill
+from streamlit_folium import folium_static
 
 
 def app():
-    st.markdown('# Daily Stock Close Price Chart')
+    st.markdown('# Fatastic Commuters and Where to Find Them')
     st.markdown(
-        'An interactive chart of daily stock closing prices using Streamlit and Altair')
-    symbol = st.text_input('', 'IBM')
-    date_range_picker = st.date_input(
-        "pick the date range", [date(2021, 1, 4), date(2021, 9, 21)])
-    datestr_format = '%Y-%m-%d'
-    startdate = date_range_picker[0].strftime(datestr_format)
-    enddate = date_range_picker[1].strftime(datestr_format)
-    df = ticker(symbol).getdata()
-    dfp = df.loc[(df.date >= startdate) & (
-        df.date <= enddate)][['date', 'close']]
-    dfp.rename({'close': 'close price'})
-    # base = alt.Chart(dfp).mark_line().encode(
-    #     x='date',
-    #     y='close'
-    # ).properties(
-    #     width=600,
-    #     height=200,
-    #     title='close price of {}'.format(symbol)
-    # )
-    # st.altair_chart(base)
-    brush = alt.selection(type='interval', encodings=['x'])
+        'An application that tells you where, when, and how many NYC subway commuters you are going to find')
+    st.markdown("First, let's take a look of the past data")
+    past_date = st.date_input(
+        'Input a date in the past',
+        value=pd.Timestamp('2021-03-01'))
+    past_interval = st.selectbox(
+        'Pick an interval',
+        ('12 AM - 4 AM',
+         '4 AM - 8 AM',
+         '8 AM - 12 AM',
+         '12 PM - 4 PM',
+         '4 PM - 8 AM',
+         '8 PM - 12 AM'))
+    st.markdown(
+        "(Feel free to drag or zoom at the map below. if you click on the bubble, you will see the stop's name.-)")
+    past_interval_p = parse_interval(past_interval)
+    datetimestr = str(past_date) + past_interval_p
+    past_data(datetimestr)
 
-    base = alt.Chart(dfp).mark_area().encode(
-        x='date:T',
-        y='close:Q'
-    ).properties(
-        width=600,
-        height=200
-    )
-    lower = base.properties(
-        height=300
-    ).add_selection(brush)
+    st.markdown("Now, let's take a look of the future")
+    new_date = st.date_input(
+        'Input a date in the future')
+    new_interval = st.selectbox(
+        'Which interval are you interested?',
+        ('12 AM - 4 AM',
+         '4 AM - 8 AM',
+         '8 AM - 12 AM',
+         '12 PM - 4 PM',
+         '4 PM - 8 AM',
+         '8 PM - 12 AM'))
 
-    st.altair_chart(lower)
-
-
-class ticker:
-    def __init__(self, ticker_symbol):
-        self.ticker_symbol = ticker_symbol
-
-    def getdata(self):
-        # replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
-        params = {'function': 'TIME_SERIES_DAILY',
-                  'symbol': self.ticker_symbol,
-                  'outputsize': 'full',
-                  'apikey': 'X143BPH0G887CZ09'}
-        url = 'https://www.alphavantage.co/query'
-        data = requests.get(url, params).json()
-        tsdata = data['Time Series (Daily)']
-        ts_date = list(tsdata.keys())
-        tsdata_list = np.zeros([len(ts_date), 5])
-        columns = ['1. open', '2. high', '3. low', '4. close', '5. volume']
-        columns_df = [x[3:] for x in columns]
-        for i in range(len(ts_date)):
-            for j in range(5):
-                tsdata_list[i][j] = tsdata[ts_date[i]][columns[j]]
-
-        df = pd.DataFrame(data=tsdata_list,
-                          index=ts_date, columns=columns_df)
-        df.reset_index(inplace=True)
-        df.rename(columns={'index': 'date'}, inplace=True)
-        df.date = pd.to_datetime(df.date)
-        return df
+    time_info = (new_date, new_interval)
+    predict_model(time_info)
 
 
+def predict_model(time_info):
+    date, interval = time_info
+
+    with open('est_onehot_ridge.dill', 'rb') as f:
+        est = dill.load(f)
+    with open('dsl_geo.dill', 'rb') as g:
+        dsl_geo = dill.load(g)
+    with open('station_name.dill', 'rb') as p:
+        station_name = dill.load(p)
+    m_new = folium.Map(location=[40.754222, -73.984569],
+                       tiles="OpenStreetMap", zoom_start=11)
+    for stop in station_name:
+        X = pd.DataFrame([[stop,
+                           interval_code(interval),
+                           date.weekday()]],
+                         columns=['Station', 'interval_code', 'weekday_code'])
+        y_pred = est.predict(X)[0]
+
+        stop_loc = dsl_geo[dsl_geo['Stop_Name'] == stop.lower()]
+        if len(stop_loc) == 0:
+            continue
+        folium.CircleMarker(
+            location=[stop_loc.iloc[0]['GTFS_Latitude'],
+                      stop_loc.iloc[0]['GTFS_Longitude']],
+            popup=stop,
+            radius=y_pred / 150,
+            color='crimson',
+            fill=True,
+            fill_color='crimson'
+        ).add_to(m_new)
+
+    folium_static(m_new)
+
+
+def past_data(datetimestr):
+    with open('df_geo.dill', 'rb') as f:
+        df_geo = dill.load(f)
+
+    df = df_geo[df_geo.Timegrp.str.contains(datetimestr)]
+
+    m = folium.Map(location=[40.754222, -73.984569],
+                   tiles="OpenStreetMap", zoom_start=11)
+    for i in range(0, df.shape[0]):
+        folium.CircleMarker(
+            location=[df.iloc[i]['GTFS_Latitude'],
+                      df.iloc[i]['GTFS_Longitude']],
+            popup=df.iloc[i]['Station'],
+            radius=float(df.iloc[i]['Exits_change']) / 150,
+            color='crimson',
+            fill=True,
+            fill_color='crimson'
+        ).add_to(m)
+
+    folium_static(m)
+
+
+def parse_interval(past_interval):
+    if past_interval == '12 AM - 4 AM':
+        return(',')
+    elif past_interval == '4 AM - 8 AM':
+        return(' 04:00:00,')
+    elif past_interval == '8 AM - 12 AM':
+        return(' 08:00:00,')
+    elif past_interval == '12 PM - 4 PM':
+        return(' 12:00:00,')
+    elif past_interval == '4 PM - 8 AM':
+        return(' 16:00:00,')
+    elif past_interval == '8 PM - 12 AM':
+        return(' 20:00:00,')
+    return('foo')
+
+
+def interval_code(new_interval):
+    if new_interval == '12 AM - 4 AM':
+        return(0)
+    elif new_interval == '4 AM - 8 AM':
+        return(1)
+    elif new_interval == '8 AM - 12 AM':
+        return(2)
+    elif new_interval == '12 PM - 4 PM':
+        return(3)
+    elif new_interval == '4 PM - 8 AM':
+        return(4)
+    elif new_interval == '8 PM - 12 AM':
+        return(5)
+    return('foo')
+
+
+# def warn(*args, **kwargs):
+#     pass
+
+
+# import warnings
+# warnings.warn = warn
 if __name__ == '__main__':
     app()
