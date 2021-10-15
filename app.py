@@ -17,14 +17,14 @@ def app():
     st.markdown("First, let's take a look of the past data")
     past_date = st.date_input(
         'Input a date in the past',
-        value=pd.Timestamp('2021-03-01'))
+        value=pd.Timestamp('2021-02-01'))
     past_interval = st.selectbox(
         'Pick an interval',
         ('12 AM - 4 AM',
          '4 AM - 8 AM',
          '8 AM - 12 AM',
          '12 PM - 4 PM',
-         '4 PM - 8 AM',
+         '4 PM - 8 PM',
          '8 PM - 12 AM'))
     st.markdown(
         "(Feel free to drag or zoom at the map below. if you click on the bubble, you will see the stop's name.-)")
@@ -72,7 +72,7 @@ def predict_model(time_info):
         folium.CircleMarker(
             location=[stop_loc.iloc[0]['GTFS_Latitude'],
                       stop_loc.iloc[0]['GTFS_Longitude']],
-            popup=stop,
+            popup=round(y_pred),
             radius=y_pred / 150,
             color='crimson',
             fill=True,
@@ -136,11 +136,11 @@ def interval_code(new_interval):
     return('foo')
 
 
-# def warn(*args, **kwargs):
-#     pass
+def warn(*args, **kwargs):
+    pass
 
 
-# import warnings
-# warnings.warn = warn
+import warnings
+warnings.warn = warn
 if __name__ == '__main__':
     app()
