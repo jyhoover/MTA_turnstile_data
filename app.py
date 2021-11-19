@@ -118,7 +118,7 @@ def parse_interval(past_interval):
         return(' 08:00:00,')
     elif past_interval == '12 PM - 4 PM':
         return(' 12:00:00,')
-    elif past_interval == '4 PM - 8 AM':
+    elif past_interval == '4 PM - 8 PM':
         return(' 16:00:00,')
     elif past_interval == '8 PM - 12 AM':
         return(' 20:00:00,')
@@ -134,7 +134,7 @@ def interval_code(new_interval):
         return(2)
     elif new_interval == '12 PM - 4 PM':
         return(3)
-    elif new_interval == '4 PM - 8 AM':
+    elif new_interval == '4 PM - 8 PM':
         return(4)
     elif new_interval == '8 PM - 12 AM':
         return(5)
