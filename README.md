@@ -43,9 +43,9 @@ The weekly data can be downloaded here:
 
 The row data has columns:
 
-`C/A`      = Control Area (A002)
-`Unit`     = Remote Unit for a station (R051)
-`SCP`      = Subunit Channel Position represents an specific address for a device (02-00-00)
+`C/A`      = Control Area (A002)\n
+`Unit`     = Remote Unit for a station (R051)\n
+`SCP`      = Subunit Channel Position represents an specific address for a device (02-00-00)\n
 `Station`  = Represents the station name the device is located at
 `Line Name` = Represents all train lines that can be boarded at this station
            Normally lines are represented by one character.  LINENAME 456NQR repersents train server for 4, 5, 6, N, Q, and R trains.
