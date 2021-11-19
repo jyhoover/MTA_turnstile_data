@@ -3,5 +3,5 @@ vir_mta/
 *.jpynb
 station_location.csv
 station_embed.dill
-.ipynb_checkpoints
+.ipynb_checkpoints\
 .DS_Store
