@@ -46,7 +46,7 @@ def app():
          '4 AM - 8 AM',
          '8 AM - 12 AM',
          '12 PM - 4 PM',
-         '4 PM - 8 AM',
+         '4 PM - 8 PM',
          '8 PM - 12 AM'))
 
     time_info = (new_date, new_interval)
