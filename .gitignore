@@ -1,5 +1,5 @@
-\vir_mta
-df_station_del_na.pkd
-MTA_ML.jpynb
+vir_mta/
+*.pkd
+*.jpynb
 station_location.csv
 station_embed.dill
