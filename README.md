@@ -43,19 +43,29 @@ The weekly data can be downloaded here:
 
 The row data has columns:
 
-`C/A`      = Control Area (A002)\n
-`Unit`     = Remote Unit for a station (R051)\n
-`SCP`      = Subunit Channel Position represents an specific address for a device (02-00-00)\n
+`C/A`      = Control Area (A002)
+
+`Unit`     = Remote Unit for a station (R051)
+
+`SCP`      = Subunit Channel Position represents an specific address for a device (02-00-00)
+
 `Station`  = Represents the station name the device is located at
+
 `Line Name` = Represents all train lines that can be boarded at this station
            Normally lines are represented by one character.  LINENAME 456NQR repersents train server for 4, 5, 6, N, Q, and R trains.
+           
 `Division` = Represents the Line originally the station belonged to BMT, IRT, or IND   
+
 `Date`     = Represents the date (MM-DD-YY)
+
 `Time`     = Represents the time (hh:mm:ss) for a scheduled audit event
+
 `Description`     = Represent the "REGULAR" scheduled audit event (Normally occurs every 4 hours)
            1. Audits may occur more that 4 hours due to planning, or troubleshooting activities. 
            2. Additionally, there may be a "RECOVR AUD" entry: This refers to a missed audit that was recovered. 
+           
 `Entries`  = The comulative entry register value for a device
+
 `Exits`    = The cumulative exit register value for a device
 
 (http://web.mta.info/developers/resources/nyct/turnstile/ts_Field_Description.txt)
