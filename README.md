@@ -84,19 +84,24 @@ Now we have passenger flow data (`Entries` and `Exits`) at each station at each 
 ## Machine learning architecture
 
 
-The project uses a simple but robust architecture. It assumes the passenger flow depends on the station , the day of a week, and the time of a day. Using one hot encoder to indicate the categorical parameters and a , the accuracy of predicting exiting passenger flow is about %
+The project uses a simple but robust architecture. It assumes the passenger flow depends on the station , the day of a week, and the time of a day. Using one hot encoder to indicate the categorical parameters and a randomforest regressor, the accuracy of predicting exiting passenger flow is about 80%.
 
 
+# Files explain
 
 
+`df_geo.dill` includes the historical passenger flow data.
 
 
+`est_onehot_ridge.dill` includes the trained model.
 
 
+`dsl_geo.dill` includes the stations' geological data.
 
 
+`station_name.dill` includes the stations' name.
 
 
-
+`app.py` is the application mainly written in streamlit.
 
 
