@@ -87,7 +87,7 @@ Now we have passenger flow data (`Entries` and `Exits`) at each station at each 
 The project uses a simple but robust architecture. It assumes the passenger flow depends on the station , the day of a week, and the time of a day. Using one hot encoder to indicate the categorical parameters and a randomforest regressor, the accuracy of predicting exiting passenger flow is about 80%.
 
 
-# Files explain
+# Files explaination
 
 
 `df_geo.dill` includes the historical passenger flow data.
