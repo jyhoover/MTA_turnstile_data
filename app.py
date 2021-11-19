@@ -16,8 +16,11 @@ def app():
         'An application that tells you where, when, and how many NYC subway commuters you are going to find')
     st.markdown("First, let's take a look of the past data")
     past_date = st.date_input(
-        'Input a date in the past',
-        value=pd.Timestamp('2021-02-01'))
+        """Input a date in the past\n
+            (between 2021-01-02 and 2021-07-16)""",
+        value=pd.Timestamp('2021-02-01'),
+        min_value=pd.Timestamp('2021-01-02'),
+        max_value=pd.Timestamp('2021-07-16'))
     past_interval = st.selectbox(
         'Pick an interval',
         ('12 AM - 4 AM',
@@ -34,7 +37,9 @@ def app():
 
     st.markdown("Now, let's take a look of the future")
     new_date = st.date_input(
-        'Input a date in the future')
+        '''Input a date in the future\n
+            (after 2021-07-17)''',
+        min_value=pd.Timestamp('2021-07-17'))
     new_interval = st.selectbox(
         'Which interval are you interested?',
         ('12 AM - 4 AM',
